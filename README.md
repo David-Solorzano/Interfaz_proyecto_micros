@@ -1,2 +1,2 @@
-# Interfaz_proyecto_micros
-Interfaz para el control del proyecto de torreta para el curso de microcontroladores
+# Proyecto final del curso microcontroladores y microprocesadores
+Implementación de un procesador RISCV 32I para el curso de microcontroladores y microprocesadores en verilog.
