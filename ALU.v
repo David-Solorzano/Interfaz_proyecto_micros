@@ -19,16 +19,27 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module ALU(
-           input [31:0] A,B,                   
+           input signed [31:0] A,B,                   
            input [2:0] ALU_Sel,
            output [31:0] ALU_Out, 
+			  output zero,
+			  output negative,
+			  output overflow,
            output CarryOut 
     );
+	 wire notzero; 
     reg [31:0]ALU_Result;
     wire [32:0] tmp;
     assign ALU_Out = ALU_Result;
     assign tmp = {1'b0,A} + {1'b0,B};
     assign CarryOut = tmp[32]; 
+	 
+	 
+	 //flags*************************************
+	 assign zero = ~(A && B) ;//Zero flag    
+	 assign overflow = tmp[32];//overflow flag
+	 assign negative = ALU_Result[31];//negative flag
+	 //******************************************
     always @(*)
     begin
         case(ALU_Sel)
@@ -54,9 +65,14 @@ module ALU(
            ALU_Result = A | B;
           4'b111: //  Logical xor 
            ALU_Result = A ^ B;
+			 4'b100: //  Arithmetic shift 
+           ALU_Result = A >>> B;
 
           default: ALU_Result = A + B ; 
         endcase
+		  
+		  
+		  
     end
 
 endmodule
