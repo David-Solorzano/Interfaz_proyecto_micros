@@ -27,7 +27,10 @@ module ALU(
 			  output overflow,
            output CarryOut 
     );
-	 wire notzero; 
+	 wire suma;
+	 wire nresta;
+	 wire xor_v;
+	 wire xnor_v;
     reg [31:0]ALU_Result;
     wire [32:0] tmp;
     assign ALU_Out = ALU_Result;
@@ -37,8 +40,15 @@ module ALU(
 	 
 	 //flags*************************************
 	 assign zero = ~(A && B) ;//Zero flag    
-	 assign overflow = tmp[32];//overflow flag
+	 
 	 assign negative = ALU_Result[31];//negative flag
+	 
+	 
+	 assign suma = ~|ALU_Sel ;
+	 assign nresta = ~(~(ALU_Sel[2]|ALU_Sel[1]) & ALU_Sel[0]);
+	 assign xor_v = A[31] ^ tmp[31];
+	 assign xnor_v= ~(suma ^ A[31] ^ B[31]);
+	 assign overflow = xor_v & xnor_v & nresta;
 	 //******************************************
     always @(*)
     begin
